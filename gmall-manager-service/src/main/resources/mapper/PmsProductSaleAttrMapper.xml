@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.gmall.manager.mapper.PmsProductSaleAttrMapper">
+  <resultMap id="BaseResultMap" type="com.guli.gmall.bean.PmsProductSaleAttr">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="sale_attr_id" jdbcType="BIGINT" property="saleAttrId" />
+    <result column="sale_attr_name" jdbcType="VARCHAR" property="saleAttrName" />
+  </resultMap>
+
+  <resultMap id="SpuSaleAttrResultMap" type="com.guli.gmall.bean.PmsProductSaleAttr" autoMapping="true">
+    <result column="sa_id" property="id"/>
+    <collection property="spuSaleAttrValueList" ofType="com.guli.gmall.bean.PmsProductSaleAttrValue" autoMapping="true">
+      <result column="sav_id" property="id"/>
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, product_id, sale_attr_id, sale_attr_name
+  </sql>
+
+  <select id="selectSpuSaleAttrListCheckBySku" resultMap="SpuSaleAttrResultMap">
+    select
+    sa.id as sa_id,sav.id as sav_id,sa.*,sav.*,if(ssav.sku_id,1,0) as isChecked
+    from pms_product_sale_attr sa
+    inner join pms_product_sale_attr_value sav
+    on sa.product_id=sav.product_id and sa.sale_attr_id=sav.sale_attr_id and sa.product_id=#{productId}
+    left join pms_sku_sale_attr_value  ssav on sav.id=ssav.sale_attr_value_id and ssav.sku_id=#{skuId}
+
+  </select>
+
+
+  <select id="selectBySpuId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pms_product_sale_attr
+    where product_id = #{product_id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pms_product_sale_attr
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByProductId" parameterType="java.lang.Long">
+    delete from pms_product_sale_attr
+    where product_id = #{product_id,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pms_product_sale_attr
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.guli.gmall.bean.PmsProductSaleAttr">
+    insert into pms_product_sale_attr (id, product_id, sale_attr_id, 
+      sale_attr_name)
+    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{saleAttrId,jdbcType=BIGINT}, 
+      #{saleAttrName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.guli.gmall.bean.PmsProductSaleAttr">
+    insert into pms_product_sale_attr
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="saleAttrId != null">
+        sale_attr_id,
+      </if>
+      <if test="saleAttrName != null">
+        sale_attr_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="saleAttrId != null">
+        #{saleAttrId,jdbcType=BIGINT},
+      </if>
+      <if test="saleAttrName != null">
+        #{saleAttrName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.guli.gmall.bean.PmsProductSaleAttr">
+    update pms_product_sale_attr
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="saleAttrId != null">
+        sale_attr_id = #{saleAttrId,jdbcType=BIGINT},
+      </if>
+      <if test="saleAttrName != null">
+        sale_attr_name = #{saleAttrName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.guli.gmall.bean.PmsProductSaleAttr">
+    update pms_product_sale_attr
+    set product_id = #{productId,jdbcType=BIGINT},
+      sale_attr_id = #{saleAttrId,jdbcType=BIGINT},
+      sale_attr_name = #{saleAttrName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

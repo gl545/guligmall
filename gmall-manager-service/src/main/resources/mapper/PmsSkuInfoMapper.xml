@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.gmall.manager.mapper.PmsSkuInfoMapper">
+  <resultMap id="BaseResultMap" type="com.guli.gmall.bean.PmsSkuInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="sku_desc" jdbcType="VARCHAR" property="skuDesc" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="tm_id" jdbcType="BIGINT" property="tmId" />
+    <result column="catalog3_id" jdbcType="BIGINT" property="catalog3Id" />
+    <result column="sku_default_img" jdbcType="VARCHAR" property="skuDefaultImg" />
+  </resultMap>
+
+  <resultMap id="SkuSaleAttrValueListResultMap" type="com.guli.gmall.bean.PmsSkuInfo" autoMapping="true">
+    <result column="si_id" property="id"/>
+   <collection property="skuSaleAttrValueList" ofType="com.guli.gmall.bean.PmsSkuSaleAttrValue" autoMapping="true">
+     <result column="ssav_id" property="id"/>
+   </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, product_id, price, sku_name, sku_desc, weight, tm_id, catalog3_id, sku_default_img
+  </sql>
+
+  <select id="selectSkuAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from pms_sku_info
+
+  </select>
+
+  <select id="selectSkuSaleAttrValueListBySpu" resultMap="SkuSaleAttrValueListResultMap">
+    select
+    si.*,ssav.*,si.id as si_id,ssav.id as ssav_id
+    from pms_sku_info si
+    join pms_sku_sale_attr_value ssav on
+    si.id=ssav.sku_id
+    where
+    si.product_id=#{productId}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pms_sku_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pms_sku_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.guli.gmall.bean.PmsSkuInfo">
+    insert into pms_sku_info (id, product_id, price, 
+      sku_name, sku_desc, weight, 
+      tm_id, catalog3_id, sku_default_img
+      )
+    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{price,jdbcType=DOUBLE}, 
+      #{skuName,jdbcType=VARCHAR}, #{skuDesc,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
+      #{tmId,jdbcType=BIGINT}, #{catalog3Id,jdbcType=BIGINT}, #{skuDefaultImg,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.guli.gmall.bean.PmsSkuInfo">
+    insert into pms_sku_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="skuName != null">
+        sku_name,
+      </if>
+      <if test="skuDesc != null">
+        sku_desc,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="tmId != null">
+        tm_id,
+      </if>
+      <if test="catalog3Id != null">
+        catalog3_id,
+      </if>
+      <if test="skuDefaultImg != null">
+        sku_default_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="skuName != null">
+        #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuDesc != null">
+        #{skuDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="tmId != null">
+        #{tmId,jdbcType=BIGINT},
+      </if>
+      <if test="catalog3Id != null">
+        #{catalog3Id,jdbcType=BIGINT},
+      </if>
+      <if test="skuDefaultImg != null">
+        #{skuDefaultImg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.guli.gmall.bean.PmsSkuInfo">
+    update pms_sku_info
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuDesc != null">
+        sku_desc = #{skuDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="tmId != null">
+        tm_id = #{tmId,jdbcType=BIGINT},
+      </if>
+      <if test="catalog3Id != null">
+        catalog3_id = #{catalog3Id,jdbcType=BIGINT},
+      </if>
+      <if test="skuDefaultImg != null">
+        sku_default_img = #{skuDefaultImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.guli.gmall.bean.PmsSkuInfo">
+    update pms_sku_info
+    set product_id = #{productId,jdbcType=BIGINT},
+      price = #{price,jdbcType=DOUBLE},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_desc = #{skuDesc,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      tm_id = #{tmId,jdbcType=BIGINT},
+      catalog3_id = #{catalog3Id,jdbcType=BIGINT},
+      sku_default_img = #{skuDefaultImg,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.gmall.manager.mapper.PmsBaseAttrValueMapper">
+  <resultMap id="BaseResultMap" type="com.guli.gmall.bean.PmsBaseAttrValue">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="value_name" jdbcType="VARCHAR" property="valueName" />
+    <result column="attr_id" jdbcType="BIGINT" property="attrId" />
+    <result column="is_enabled" jdbcType="VARCHAR" property="isEnabled" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, value_name, attr_id, is_enabled
+  </sql>
+
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from pms_base_attr_value
+    where attr_id = #{attrId}
+  </delete>
+
+  <select id="selectByAttrId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pms_base_attr_value
+    where attr_id = #{attrId}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pms_base_attr_value
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pms_base_attr_value
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.guli.gmall.bean.PmsBaseAttrValue">
+    insert into pms_base_attr_value (id, value_name, attr_id, 
+      is_enabled)
+    values (#{id,jdbcType=BIGINT}, #{valueName,jdbcType=VARCHAR}, #{attrId,jdbcType=BIGINT}, 
+      #{isEnabled,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.guli.gmall.bean.PmsBaseAttrValue">
+    insert into pms_base_attr_value
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="valueName != null">
+        value_name,
+      </if>
+      <if test="attrId != null">
+        attr_id,
+      </if>
+      <if test="isEnabled != null">
+        is_enabled,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="valueName != null">
+        #{valueName,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null">
+        #{attrId,jdbcType=BIGINT},
+      </if>
+      <if test="isEnabled != null">
+        #{isEnabled,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.guli.gmall.bean.PmsBaseAttrValue">
+    update pms_base_attr_value
+    <set>
+      <if test="valueName != null">
+        value_name = #{valueName,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null">
+        attr_id = #{attrId,jdbcType=BIGINT},
+      </if>
+      <if test="isEnabled != null">
+        is_enabled = #{isEnabled,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.guli.gmall.bean.PmsBaseAttrValue">
+    update pms_base_attr_value
+    set value_name = #{valueName,jdbcType=VARCHAR},
+      attr_id = #{attrId,jdbcType=BIGINT},
+      is_enabled = #{isEnabled,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

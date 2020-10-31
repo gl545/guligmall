@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.gmall.manager.mapper.PmsBaseCatalog3Mapper">
+  <resultMap id="BaseResultMap" type="com.guli.gmall.bean.PmsBaseCatalog3">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="catalog2_id" jdbcType="BIGINT" property="catalog2Id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, catalog2_id
+  </sql>
+  <select id="selectByCatalog2Id"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pms_base_catalog3
+    where catalog2_id = #{catalog2Id}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pms_base_catalog3
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pms_base_catalog3
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.guli.gmall.bean.PmsBaseCatalog3">
+    insert into pms_base_catalog3 (id, name, catalog2_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{catalog2Id,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.guli.gmall.bean.PmsBaseCatalog3">
+    insert into pms_base_catalog3
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="catalog2Id != null">
+        catalog2_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog2Id != null">
+        #{catalog2Id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.guli.gmall.bean.PmsBaseCatalog3">
+    update pms_base_catalog3
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog2Id != null">
+        catalog2_id = #{catalog2Id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.guli.gmall.bean.PmsBaseCatalog3">
+    update pms_base_catalog3
+    set name = #{name,jdbcType=VARCHAR},
+      catalog2_id = #{catalog2Id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

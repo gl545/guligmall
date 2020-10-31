@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.gmall.manager.mapper.PmsBaseAttrInfoMapper">
+  <resultMap id="BaseResultMap" type="com.guli.gmall.bean.PmsBaseAttrInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="attr_name" jdbcType="VARCHAR" property="attrName" />
+    <result column="catalog3_id" jdbcType="BIGINT" property="catalog3Id" />
+    <result column="is_enabled" jdbcType="VARCHAR" property="isEnabled" />
+  </resultMap>
+
+  <resultMap id="selectAttrListMap" type="com.guli.gmall.bean.PmsBaseAttrInfo" autoMapping="true">
+    <result column="ba_id" property="id"/>
+    <collection property="attrValueList" ofType="com.guli.gmall.bean.PmsBaseAttrValue" autoMapping="true">
+      <result column="bav_id" property="id"/>
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, attr_name, catalog3_id, is_enabled
+  </sql>
+
+  <select id="selectAttrList" resultMap="selectAttrListMap">
+    select
+    ba.*,bav.*,ba.id as ba_id,bav.id as bav_id
+    from pms_base_attr_info ba
+    join pms_base_attr_value bav
+    on ba.id=bav.attr_id
+    where
+    bav.id in (${valueIdStr})
+
+  </select>
+
+  <select id="selectAttr" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pms_base_attr_info
+    where catalog3_id = #{catalog3Id}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pms_base_attr_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pms_base_attr_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.guli.gmall.bean.PmsBaseAttrInfo">
+    insert into pms_base_attr_info (id, attr_name, catalog3_id, 
+      is_enabled)
+    values (#{id,jdbcType=BIGINT}, #{attrName,jdbcType=VARCHAR}, #{catalog3Id,jdbcType=BIGINT}, 
+      #{isEnabled,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.guli.gmall.bean.PmsBaseAttrInfo">
+    insert into pms_base_attr_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="attrName != null">
+        attr_name,
+      </if>
+      <if test="catalog3Id != null">
+        catalog3_id,
+      </if>
+      <if test="isEnabled != null">
+        is_enabled,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="attrName != null">
+        #{attrName,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog3Id != null">
+        #{catalog3Id,jdbcType=BIGINT},
+      </if>
+      <if test="isEnabled != null">
+        #{isEnabled,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.guli.gmall.bean.PmsBaseAttrInfo">
+    update pms_base_attr_info
+    <set>
+      <if test="attrName != null">
+        attr_name = #{attrName,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog3Id != null">
+        catalog3_id = #{catalog3Id,jdbcType=BIGINT},
+      </if>
+      <if test="isEnabled != null">
+        is_enabled = #{isEnabled,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.guli.gmall.bean.PmsBaseAttrInfo">
+    update pms_base_attr_info
+    set attr_name = #{attrName,jdbcType=VARCHAR},
+      catalog3_id = #{catalog3Id,jdbcType=BIGINT},
+      is_enabled = #{isEnabled,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
